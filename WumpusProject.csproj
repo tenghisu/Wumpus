@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E16655CD-31DD-484C-A750-3F0196FD08CB}</ProjectGuid>
+    <ProjectGuid>{064B744F-44A8-4FCC-9BF2-B66B23A5ED27}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WumpusProject</RootNamespace>
@@ -44,47 +44,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cave.cs" />
-    <Compile Include="CaveTest.cs">
+    <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CaveTest.Designer.cs" />
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
     <Compile Include="GameControl.cs" />
-    <Compile Include="GameControlTest.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GameControlTest.Designer.cs" />
-    <Compile Include="Map%281%29.cs" />
     <Compile Include="Map.cs" />
-    <Compile Include="MapTest.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MapTest.Designer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sound %281%29%281%29.cs" />
-    <Compile Include="Sound %281%29.cs" />
-    <Compile Include="Sound.cs" />
-    <Compile Include="SoundTest.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SoundTest.Designer.cs" />
-    <Compile Include="Trivia.cs" />
-    <Compile Include="Triviakek.cs" />
-    <Compile Include="TriviaLevelkek.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="TriviaTest.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TriviaTest.Designer.cs" />
-    <Compile Include="UserInterface%281%29.cs" />
-    <Compile Include="UserInterface%282%29.cs" />
     <Compile Include="UserInterface.cs" />
-    <Compile Include="UserInterfaceTest.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UserInterfaceTest.Designer.cs" />
+    <Compile Include="Wumpus.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
