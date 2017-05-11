@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +12,8 @@ namespace WumpusProject
         Wumpus wumpus;
         UserInterface UI;
         Map map;
+        static Trivia trivia;
+        Cave cave;
         
         //player
         int playerPosition;
@@ -20,19 +22,35 @@ namespace WumpusProject
         //wumpus
         int wumpusPosition;
         String wumpusState;
-        String wumpusMovingWarning;
 
         //trivia
-        char playerAnswer;
+        int questionNum;
+        String question;
+        String answer;
+        Boolean correct;
 
-        public static void main(String[] args)
-        {
-        }
         public GameControl()
         {
+            //player
             playerPosition = 0;
+            
+            //wumpus
+            wumpus = new Wumpus();
+            this.wumpusPosition = wumpus.getWumpusPosition();
+            this.wumpusState = wumpus.getWumpusState();
+            
+            //trivia
+            questionNum = 15;
+            question = "";
+            answer = "";
+            correct = true;
+
+            //cave
+            cave = new Cave();
+            cave.initialize();
         }
-        public void startGame(Map map, UserInterface UI) //user starts game
+        
+        public void startGame() //user starts game
         {
             String playerName = UI.playerName();
             char wantNewGame = UI.wantNewGame();
@@ -41,31 +59,32 @@ namespace WumpusProject
             map.newGame(map);
             
         }
-        public int getPlayerPosition(UserInterface UI) //player moves
+        public int getPlayerPosition() //player moves
         {
             playerPosition = UI.playerMoves();
             return playerPosition;
         }
-        public char getPlayerOption(UserInterface UI) //player option
+
+        public char getPlayerOption() //player option
         {
             return UI.userOptions();
         }
-        public String getWumpusState(Wumpus wumpus, int playerPosition)
+
+        public void encounter()
         {
-            wumpus.setWumpusState(playerPosition);
-            String wumpusState = wumpus.getWumpusState();
-            return wumpusState;
-        }
-        public String getWumpusMovingWarning(Wumpus wumpus, int playerPosition)
-        {
-            return wumpus.wumpusMoving(playerPosition);
-        }
-        public int getWumpusPosition(Wumpus wumpus)
-        {
-            wumpus.setWumpusPosition();
-            int wumpusPosition = wumpus.getWumpusPosition();
-            return wumpusPosition;
+            playerPosition = getPlayerPosition();
+            wumpusPosition = wumpus.getWumpusPosition();
+            if (playerPosition == wumpusPosition)
+            {
+                //fight? idek
+            }
         }
 
+        public void goToTrivia() //trivia?
+        {
+            question = Trivia.GetQuestion(questionNum);
+            answer = Trivia.GetAnswer(questionNum);
+            correct = Trivia.CheckAnswer(answer, questionNum);
+        }
     }
 }
