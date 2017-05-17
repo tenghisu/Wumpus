@@ -29,11 +29,21 @@ namespace WumpusProject
         {
             return coins;
         }
-
-        public int getRoom()
+        public void spendCoin()
         {
-            int playersPosition = Player.getPlayersPosition();
+            coins--;
+        }
+        public void setPlayersPosition(int inSet)
+        {
+            playersPosition = inSet;
+        }
+        public int getPlayersPosition()
+        {
             return playersPosition;
+        }
+        public int getArrows()
+        {
+            return arrows;
         }
         public int buyArrow()
         {

@@ -13,7 +13,7 @@ namespace WumpusProject
         private int turnsSinceWumpus;
         private WumpusState state;
 
-        enum WumpusState
+        public enum WumpusState
 
         {
             Asleep = 1,
@@ -119,24 +119,24 @@ namespace WumpusProject
             return position;
         }
 
-        public void playerEnters(int playerPosition, Boolean pit, Boolean bats, Cave c1) //situations awakening Wumpus; when player enters the same room
+        public void playerEnters(Boolean pit, Boolean bats, Cave c1) //situations awakening Wumpus; when player enters the same room
         {
             state = WumpusState.Asleep;
-            if (playerPosition == position && pit == false && bats == false)
+            if (pit == false && bats == false)
             {
                 state = WumpusState.Awake;
                 //GC/UI calls trivia
                 turnsSinceWumpus = 0;
 
             }
-            else if (playerPosition == position && pit == true && bats == false)
+            else if (pit == true && bats == false)
             {
                 state = WumpusState.Awake;
                 //position moves
                 moveWumpus(1, c1);
                 turnsSinceWumpus = 0;
             }
-            else if (playerPosition == position && pit == false && bats == true)
+            else if (pit == false && bats == true)
             {
                 state = WumpusState.Awake;
                 //position moves
