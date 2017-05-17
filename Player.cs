@@ -29,30 +29,26 @@ namespace WumpusProject
         {
             return coins;
         }
-        public void spendCoin()
-        {
-            coins--;
-        }
         public void setPlayersPosition(int inSet)
         {
             playersPosition = inSet;
-        }
-        public int getPlayersPosition()
-        {
-            return playersPosition;
         }
         public int getArrows()
         {
             return arrows;
         }
-        public int buyArrow()
+        public void buyArrow()
         {
+            coins--;
+            // calls trivia
             arrows += 2;
-            return arrows;
         }
         public void newTurn()
         {
-            coins++;
+            if (coins <= 100)
+            {
+                coins++;
+            }
             turns++;
         }
         public int getHighScore()
@@ -64,6 +60,18 @@ namespace WumpusProject
             string[] secrets = File.ReadAllLines(@"C:\Users\mingq\Downloads\Wumpus-Dank-Memes\Wumpus-Dank-Memes\Secrets.txt");
             Random rand = new Random();
             return secrets[rand.Next(secrets.Length)];
+        }
+        public void shootArrow()
+        {
+            arrows--;
+
+        }
+        public void movePlayer()
+        {
+            if (roomNumberPlayer == roomNumberWumpus)
+            {
+
+            }
         }
     }
 }

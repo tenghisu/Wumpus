@@ -8,22 +8,34 @@ namespace WumpusProject
 {
     class Map
     {
-        private int roomNumberPlayer;
-        private int roomNumberWumpus;
-        private int roomNumberPit1;
-        private int roomNumberPit2;
-        private int roomNumberBat1;
-        private int roomNumberBat2;
+        public int roomNumberPlayer;
+        public int roomNumberWumpus;
+        public int roomNumberPit1;
+        public int roomNumberPit2;
+        public int roomNumberBat1;
+        public int roomNumberBat2;
 
-        public Map newGame(Map newMap)
+        public void newGame()
         {
-            //Cave newCave = new Cave();
-            return newMap;
-            // in new game this can return a map filled with 
-            // the player and hazards
+            Random rand = new Random();
+            List<int> ROOMS = new List<int>();
+            for(int i = 0; i < 30; i++){
+                ROOMS.Add(i);
+            }
+            Cave newCave = new Cave();
+            int roomNumberPlayer = 0;
+            int roomNumberPit1 = ROOMS[rand.Next(30)];
+            ROOMS.Remove(roomNumberPit1);
+            int roomNumberPit2 = ROOMS[rand.Next(29)];
+            ROOMS.Remove(roomNumberPit2);
+            int roomNumberBat1 = ROOMS[rand.Next(28)];
+            ROOMS.Remove(roomNumberBat1);
+            int roomNumberBat2 = ROOMS[rand.Next(30)];
+            ROOMS.Remove(roomNumberBat2);
         }
         public int wumpusLocation()
         {
+            int roomNumberWumpus = 0;
             Wumpus wumpus = new Wumpus();
             int wumpusPosition = wumpus.getWumpusPosition();
             String state = wumpus.getWumpusState().ToString();
@@ -36,7 +48,8 @@ namespace WumpusProject
             {
                 movement = 1;
             }
-            return roomNumberWumpus + movement;
+            roomNumberWumpus = roomNumberWumpus + movement;
+            return roomNumberWumpus;
             // given the wumpus state I can make the wumpus move to a whole new room number
         }
         public int getRoomNumberPit1()
@@ -63,27 +76,30 @@ namespace WumpusProject
         //{
         //    // calls trivia to see correct or incorrect to factor into player's inventory
         //}
-        //public Inventory highScore()
-        //{
-        //    return inventory;
-        //    // returns player's inventory to high score so that they can add up high score
-        //}
-        //public Boolean isWumpusCloseToPlayer()
-        //{
-        //    Wumpus wumpus = new Wumpus();
-        //    Player player = new Player();
-        //    Boolean warning;
-        //    int roomNumberWumpus = wumpus.getWumpusPosition();
-        //    int roomNumberPlayer = player.getPlayerPosition();
-        //    if (roomNumberWumpus + 2 == roomNumberPlayer) 
-        //    {
-        //        Boolean warning = true;
-        //    }
-        //    return warning;
-        //}
-        //public Boolean hazards()
-        //{
-
-        //}
+        public String isWumpusCloseToPlayer()
+        {
+            Boolean warning = false;
+            if (roomNumberWumpus + 1 == roomNumberPlayer) 
+            {
+                warning = true;
+            }
+            return "I smell a Wumpus";
+        }
+        public String hazards()
+        {
+            String warning = "";
+            if (roomNumberPlayer.nextTo(roomNumberPit1) || roomNumberPlayer.nextTo(roomNumberPit2))
+            {
+                warning = "I feel a draft.";
+            }
+            if (roomNumberPlayer.nextTo(roomNumberBat1) || roomNumberPlayer.nextTo(roomNumberBat2))
+            {
+                warning = "Bats Nearby.";
+            } if (roomNumberPlayer.nextTo(roomNumberWumpus))
+            {
+                warning = "I smell a Wumpus!";
+            }
+            return warning;
+        }
     }
 }
