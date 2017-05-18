@@ -16,9 +16,11 @@ namespace WumpusProject
         Player player;
 
         Boolean alive;
-        Boolean winTrivia;
+      
         int questionNumber;
-        int beginningPosition;
+        
+        List<Boolean> questionsRight;
+  
         public GameControl()
         {
             wumpus = new Wumpus();//int position, int turnsSinceWumpus, enum WumpusState state
@@ -29,127 +31,127 @@ namespace WumpusProject
             player = new Player();//arrows, coins, turns, playersPosition, highScore (all int)
 
             alive = true;
-            questionNumber = 15;
-            winTrivia = true;
-            beginningPosition = 0;//get from cave the actual number?
+            questionNumber = 2;//total number of questions in trivia text doc
+            questionsRight = new List<bool>();
+           
         }
 
-        
-        public String getNextQuestion(int questionNumber)
+
+        public String getNextQuestion()//trivia
         {
-            Random r = new Random();
-            questionNumber = r.Next(1, questionNumber + 1);
             return Trivia.GetQuestion(questionNumber);
         }
         public Boolean getCorrectness(String userAnswer)//userAnswer from UI
         {
-            return Trivia.CheckAnswer(userAnswer, questionNumber);
-        }
-        public Boolean checkIfAlive()
-        {
-            return alive;
-        }
-        public void triviaRound(int correctNeeded, int chances)//wumpus is 3/5, pit is 2/3, buy 2 arrows 2/3, buy 1 secret 2/3
-        {
-            int tries = 0;
-            int numberCorrect = 0;
-            while(tries <= chances-1 && correctNeeded-numberCorrect <= chances-1-tries && player.getCoins() !=0)
+            Boolean correct = Trivia.CheckAnswer(userAnswer, questionNumber);
+            if (correct)
             {
-                Boolean correct = getCorrectness("B");//get real userAnswer from UI after she does it
-                player.spendCoin();
-                if (correct)
-                {
-                    numberCorrect++;
-                }
-                questionNumber--;
-                tries++;
+                questionsRight.Add(true);
             }
-            if(numberCorrect == correctNeeded)
+            return correct;
+        }
+        public Boolean triviaRound(int correctNeeded, int chances)//wumpus is 3/5, pit is 2/3, buy 2 arrows 2/3, buy 1 secret 2/3
+        {
+            Boolean win = true;
+            if (correctNeeded >= questionsRight.Count())
             {
-                winTrivia = true;
+                win = true;
             }
             else
             {
-                winTrivia = false;
+                win = false;
             }
+            return win;
         }
-        public Boolean getWinTrivia()
+        public List<Boolean> getQuestionsRight()
         {
-            return winTrivia;
-        }
-        public void encounterPit()
-        {
-            if(player.getPlayersPosition()==map.getRoomNumberPit1() || player.getPlayersPosition() == map. getRoomNumberPit2())
-            winTrivia = false;
-            triviaRound(2, 3);
-            if (!getWinTrivia())
-            {
-                player.setPlayersPosition(beginningPosition);
-            }
+            return questionsRight;
         }
 
+        public void playerPosition(int setAs)
+        {
+            player.setPlayersPosition(setAs);
+        }
+        public int getPlayerPosition()
+        {
+            return player.getPlayersPosition();
+        }
+
+        public int getCoins()
+        {
+            return player.getCoins();
+        }
+        public int getArrows()
+        {
+            return player.getArrows();
+        }
+        public int getScore()
+        {
+            return player.getHighScore();
+        }
+
+
+        public void setQuestionNumber(int number)//for testing
+        {
+            questionNumber = number;
+        }
         
-        //buy things$$
-        public String secret()
-        {
-            winTrivia = false;
-            triviaRound(2, 3);
-            if (getWinTrivia())
-            {
-                return player.buySecret();
-            }
-            return "Failed to purchase a secret :(";
-        }
-        public void arrow()
-        {
-            winTrivia = false;
-            triviaRound(2, 3);
-            if (getWinTrivia())
-            {
-                player.buyArrow();
-            }
-        }
 
-        public void takeTurn()
+        public int getQuestionNumber()
         {
-            if(player.getArrows()==0 || player.getCoins()==0) 
+            return questionNumber;
+        }
+        
+        
+        
+        
+   
+        
+        public String getSecret()
+        {
+            return player.buySecret();
+        }
+        public Boolean wantArrows(String userOption)//from UI
+        {
+            Boolean buy = false;
+            if (userOption.ToLower().CompareTo("yes") == 0)
             {
-            alive = false; //(rip)
+                buy = true;
             }
-            player.newTurn();
-            //find new playerposition, add after map/cave is done?
-
-            //UI asks if they want to buy stuff
-            if (player.getPlayersPosition() == wumpus.getWumpusPosition())//encounter
+            return buy;
+        }
+        public Boolean wantSecret(String userOption)//from UI
+        {
+            Boolean buy = false;
+            if (userOption.ToLower().CompareTo("yes") == 0)
             {
-                encounterWithWumpus();
+                buy = true;
             }
+            return buy;
         }
 
-        public void encounterWithWumpus()
+
+        public Boolean getPit()
         {
             Boolean pit = player.getPlayersPosition() == map.getRoomNumberPit1() || player.getPlayersPosition() == map.getRoomNumberPit1();
-            Boolean bat = player.getPlayersPosition() == map.getRoomNumberBat1() || player.getPlayersPosition() == map.getRoomNumberBat2();
-
-            wumpus.playerEnters(pit, bat, cave);
-            if (wumpus.getWumpusState().ToString().ToLower() == "awake" && bat == false && pit == false)
-            {
-                winTrivia = false;
-                triviaRound(3, 5);
-                if (!getWinTrivia())
-                {
-                    alive = false; // rip
-                }
-            }
-            else if (bat == true)
-            {
-                //add when cave/map is done
-            }
-            else if(pit == true)
-            {
-                encounterPit();
-            }
+            return pit;
         }
+        public Boolean getBat()
+        {
+            Boolean bat = player.getPlayersPosition() == map.getRoomNumberBat1() || player.getPlayersPosition() == map.getRoomNumberBat2();
+            return bat;
+        }
+
+
+        public void wumpusEncounter()
+        {
+            wumpus.playerEnters(getPit(), getBat(), cave);
+        }
+        public String getWumpusState()
+        {
+            return wumpus.getWumpusState().ToString().ToLower();
+        }
+        
         public String getWarning()
         {
             String warn = "";
@@ -167,7 +169,13 @@ namespace WumpusProject
             }
             return warn;
         }
-        
-        
+
+
+        public Boolean checkIfAlive()//alive
+        {
+            return alive;
+        }
+
+
     }
 }
