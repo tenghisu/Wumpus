@@ -15,10 +15,14 @@ namespace WumpusProject
         public int roomNumberBat1;
         public int roomNumberBat2;
 
+        List<int> ROOMS;
+        Trivia trivia;
+        Random rand;
+        Wumpus wumpus;
+        Player player;
+
         public void newGame()
-        {
-            Random rand = new Random();
-            List<int> ROOMS = new List<int>();
+        {   
             for(int i = 0; i < 30; i++){
                 ROOMS.Add(i);
             }
@@ -30,13 +34,12 @@ namespace WumpusProject
             ROOMS.Remove(roomNumberPit2);
             int roomNumberBat1 = ROOMS[rand.Next(28)];
             ROOMS.Remove(roomNumberBat1);
-            int roomNumberBat2 = ROOMS[rand.Next(30)];
+            int roomNumberBat2 = ROOMS[rand.Next(27)];
             ROOMS.Remove(roomNumberBat2);
         }
         public int wumpusLocation()
         {
             int roomNumberWumpus = 0;
-            Wumpus wumpus = new Wumpus();
             int wumpusPosition = wumpus.getWumpusPosition();
             String state = wumpus.getWumpusState().ToString();
             int movement = 0;
@@ -51,6 +54,14 @@ namespace WumpusProject
             roomNumberWumpus = roomNumberWumpus + movement;
             return roomNumberWumpus;
             // given the wumpus state I can make the wumpus move to a whole new room number
+        }
+        public int getRoomNumberPlayer()
+        {
+            return roomNumberPlayer;
+        }
+        public int getRoomNumberWumpus()
+        {
+            return roomNumberWumpus;
         }
         public int getRoomNumberPit1()
         {
@@ -68,14 +79,6 @@ namespace WumpusProject
         {
             return roomNumberBat2; 
         }
-        //public void callTrivia()
-        //{
-        //    // calls trivia that we need trivia after hitting hazard
-        //}
-        //public void trivia(Trivia correctness)
-        //{
-        //    // calls trivia to see correct or incorrect to factor into player's inventory
-        //}
         public String isWumpusCloseToPlayer()
         {
             Boolean warning = false;
@@ -95,11 +98,43 @@ namespace WumpusProject
             if (roomNumberPlayer.nextTo(roomNumberBat1) || roomNumberPlayer.nextTo(roomNumberBat2))
             {
                 warning = "Bats Nearby.";
-            } if (roomNumberPlayer.nextTo(roomNumberWumpus))
+            } 
+            if (roomNumberPlayer.nextTo(roomNumberWumpus))
             {
                 warning = "I smell a Wumpus!";
             }
             return warning;
+        }
+        public void movePlayer()
+        {
+            if (roomNumberPlayer == roomNumberWumpus)
+            {
+
+            }
+            if (roomNumberPlayer == roomNumberBat1)
+            {
+                roomNumberPlayer = rand.Next(30);
+                ROOMS.Remove(roomNumberPlayer);
+                roomNumberBat1 = ROOMS[rand.Next(26)];
+                ROOMS.Remove(roomNumberBat1);
+            }
+            if (roomNumberPlayer == roomNumberBat2)
+            {
+                roomNumberPlayer = rand.Next(30);
+                ROOMS.Remove(roomNumberPlayer);
+                roomNumberBat2 = ROOMS[rand.Next(26)];
+                ROOMS.Remove(roomNumberBat2);
+            }
+            if (roomNumberPlayer == roomNumberPit1 || roomNumberPlayer == roomNumberPit2)
+            {
+                
+            }
+        }
+        public int shootArrow()
+        {
+            int arrows = player.getArrows();
+            arrows--;
+            return arrows;
         }
     }
 }

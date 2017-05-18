@@ -15,6 +15,7 @@ namespace WumpusProject
         private int playersPosition;
         public int highScore;
 
+        Map map;
 
         public Player()
         {
@@ -57,21 +58,11 @@ namespace WumpusProject
         }
         public String buySecret()
         {
-            string[] secrets = File.ReadAllLines(@"C:\Users\mingq\Downloads\Wumpus-Dank-Memes\Wumpus-Dank-Memes\Secrets.txt");
-            Random rand = new Random();
-            return secrets[rand.Next(secrets.Length)];
+            return "";
         }
-        public void shootArrow()
+        public void shotArrow()
         {
-            arrows--;
-
-        }
-        public void movePlayer()
-        {
-            if (roomNumberPlayer == roomNumberWumpus)
-            {
-
-            }
+            arrows = map.shootArrow();
         }
     }
 }
