@@ -109,7 +109,7 @@ namespace WumpusProject
         {
             if (roomNumberPlayer == roomNumberWumpus)
             {
-
+                Trivia.GetRandomQuestionAndAnswers();
             }
             if (roomNumberPlayer == roomNumberBat1)
             {
@@ -127,7 +127,7 @@ namespace WumpusProject
             }
             if (roomNumberPlayer == roomNumberPit1 || roomNumberPlayer == roomNumberPit2)
             {
-                
+                Trivia.GetRandomQuestionAndAnswers();
             }
         }
         public int shootArrow()
@@ -135,6 +135,19 @@ namespace WumpusProject
             int arrows = player.getArrows();
             arrows--;
             return arrows;
+        }
+        public String buySecret()
+        {
+            Random rand = new Random();
+            String[] secrets = new String [7];
+            secrets[0] = roomNumberPlayer.ToString();
+            secrets[1] = roomNumberWumpus.ToString();
+            secrets[2] = roomNumberBat1.ToString();
+            secrets[3] = roomNumberPit1.ToString();
+            secrets[4] = Trivia.GetAnswer(rand.Next(49));
+            secrets[5] = roomNumberBat2.ToString();
+            secrets[6] = roomNumberPit2.ToString();
+            return secrets[rand.Next(7)];
         }
     }
 }

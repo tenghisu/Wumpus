@@ -14,6 +14,7 @@ namespace WumpusProject
         private int turns;
         private int playersPosition;
         public int highScore;
+        public String alive;
 
         Map map;
 
@@ -25,25 +26,6 @@ namespace WumpusProject
             playersPosition = 0;
             highScore = 0;
         }
-
-        public int getCoins()
-        {
-            return coins;
-        }
-        public void setPlayersPosition(int inSet)
-        {
-            playersPosition = inSet;
-        }
-        public int getArrows()
-        {
-            return arrows;
-        }
-        public void buyArrow()
-        {
-            coins--;
-            // calls trivia
-            arrows += 2;
-        }
         public void newTurn()
         {
             if (coins <= 100)
@@ -52,17 +34,45 @@ namespace WumpusProject
             }
             turns++;
         }
+        public int getCoins()
+        {
+            return coins;
+        }
+        public void setPlayersPosition()
+        {
+            playersPosition = map.getRoomNumberPlayer();
+        }
+        public int getArrows()
+        {
+            if (arrows == 0)
+            {
+                death();
+            }
+            return arrows;
+        }
+        public void buyArrow()
+        {
+            coins--;
+            // calls trivia
+            arrows += 2;
+        }
         public int getHighScore()
         {
             return 100 - turns + coins + (10 * arrows);
         }
         public String buySecret()
         {
-            return "";
+            String secret = map.buySecret();
+            return secret;
         }
         public void shotArrow()
         {
             arrows = map.shootArrow();
+        }
+        public void death()
+        {
+            getHighScore();
+            alive = "death";
         }
     }
 }

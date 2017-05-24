@@ -68,13 +68,9 @@ namespace WumpusProject
             return questionsRight;
         }
 
-        public void playerPosition(int setAs)
-        {
-            player.setPlayersPosition(setAs);
-        }
         public int getPlayerPosition()
         {
-            return player.getPlayersPosition();
+            return map.getRoomNumberPlayer();
         }
 
         public int getCoins()
@@ -90,22 +86,15 @@ namespace WumpusProject
             return player.getHighScore();
         }
 
-
         public void setQuestionNumber(int number)//for testing
         {
             questionNumber = number;
         }
-        
 
         public int getQuestionNumber()
         {
             return questionNumber;
         }
-        
-        
-        
-        
-   
         
         public String getSecret()
         {
@@ -133,12 +122,12 @@ namespace WumpusProject
 
         public Boolean getPit()
         {
-            Boolean pit = player.getPlayersPosition() == map.getRoomNumberPit1() || player.getPlayersPosition() == map.getRoomNumberPit1();
+            Boolean pit = map.getRoomNumberPlayer() == map.getRoomNumberPit1() || map.getRoomNumberPlayer() == map.getRoomNumberPit1();
             return pit;
         }
         public Boolean getBat()
         {
-            Boolean bat = player.getPlayersPosition() == map.getRoomNumberBat1() || player.getPlayersPosition() == map.getRoomNumberBat2();
+            Boolean bat = map.getRoomNumberPlayer() == map.getRoomNumberBat1() || map.getRoomNumberPlayer() == map.getRoomNumberBat2();
             return bat;
         }
 
@@ -155,27 +144,25 @@ namespace WumpusProject
         public String getWarning()
         {
             String warn = "";
-            if (Math.Abs(player.getPlayersPosition()-wumpus.getWumpusPosition())==1)
+            if (Math.Abs(map.getRoomNumberPlayer()-wumpus.getWumpusPosition())==1)
             {
                 warn += "I smell a Wumpus! ";
             }
-            if (Math.Abs(player.getPlayersPosition() - map.getRoomNumberBat1()) == 1 || Math.Abs(player.getPlayersPosition() - map.getRoomNumberBat2()) == 1)
+            if (Math.Abs(map.getRoomNumberPlayer() - map.getRoomNumberBat1()) == 1 || Math.Abs(map.getRoomNumberPlayer() - map.getRoomNumberBat2()) == 1)
             {
                 warn+= "Bats Nearby ";
             }
-            if(Math.Abs(player.getPlayersPosition() - map.getRoomNumberPit1()) == 1|| Math.Abs(player.getPlayersPosition() - map.getRoomNumberPit2()) == 1)
+            if (Math.Abs(map.getRoomNumberPlayer() - map.getRoomNumberPit1()) == 1 || Math.Abs(map.getRoomNumberPlayer() - map.getRoomNumberPit2()) == 1)
             {
                 warn+= "I feel a draft";
             }
             return warn;
         }
 
-
         public Boolean checkIfAlive()//alive
         {
             return alive;
         }
-
 
     }
 }
