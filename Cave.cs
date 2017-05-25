@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+//using Newtonsoft.Json;
+using System.IO;
 
 namespace WumpusProject
 {
     class Cave
     {
         const int MAX_CONNECTIONS = 6;
-        const int ROOM_COUNT = 20;
+        const int ROOM_COUNT = 30;
         public List<Node<Room>> m_roomList = new List<Node<Room>>();
+        private static readonly object syncLock = new object();
 
         public void initialize()
         {
@@ -22,6 +25,56 @@ namespace WumpusProject
             
             
         }
+
+        /*
+        public void createEasy()
+        {
+            String JsonString = File.ReadAllText("EasyCaveConfig.json");
+            CaveConfig c = JsonConvert.DeserializeObject<CaveConfig>(JsonString);
+
+            for (int i = 0; i < ROOM_COUNT; i++)
+            {
+                for (int j = 0; j < c.RoomList.ElementAt(i).ConnectedTo.Length; j++)
+                {
+                    connect(m_roomList.ElementAt(i), m_roomList.ElementAt(c.RoomList.ElementAt(i).ConnectedTo.ElementAt(j)));
+                }
+
+            }
+
+        }
+
+        public void createMedium()
+        {
+            String JsonString = File.ReadAllText("MediumCaveConfig.json");
+            CaveConfig c = JsonConvert.DeserializeObject<CaveConfig>(JsonString);
+
+            for (int i = 0; i < ROOM_COUNT; i++)
+            {
+                for (int j = 0; j < c.RoomList.ElementAt(i).ConnectedTo.Length; j++)
+                {
+                    connect(m_roomList.ElementAt(i), m_roomList.ElementAt(c.RoomList.ElementAt(i).ConnectedTo.ElementAt(j)));
+                }
+
+            }
+
+        }
+
+        public void createHard()
+        {
+            String JsonString = File.ReadAllText("HardCaveConfig.json");
+            CaveConfig c = JsonConvert.DeserializeObject<CaveConfig>(JsonString);
+
+            for(int i = 0; i < ROOM_COUNT; i++)
+            {
+                for (int j = 0; j < c.RoomList.ElementAt(i).ConnectedTo.Length; j++)
+                {
+                    connect(m_roomList.ElementAt(i), m_roomList.ElementAt(c.RoomList.ElementAt(i).ConnectedTo.ElementAt(j)));
+                }
+                    
+            }
+            
+        }
+         * */
 
         public Node<Room> getNodeRoom(int ID)
         {
@@ -76,7 +129,7 @@ namespace WumpusProject
 
         public void createMaze()
         {
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < ROOM_COUNT; i++)
             {
                 Node<Room> current = m_roomList[i];
 
@@ -87,11 +140,21 @@ namespace WumpusProject
 
                 while (current.neighborCount < 6 && CandidateList.Count > 0)
                 {
-                    int j = Helper.GetRandomNumber(0, CandidateList.Count);
+                    int j = GetRandomNumber(0, CandidateList.Count);
                     connect(current, CandidateList[j]);
                     CandidateList.RemoveAt(j);
                 }
 
+            }
+        }
+
+        public static int GetRandomNumber(int min, int max)
+        {
+            Random getrandom = new Random();
+
+            lock (syncLock)
+            { // synchronize
+                return getrandom.Next(min, max);
             }
         }
 

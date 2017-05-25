@@ -18,7 +18,7 @@ namespace WumpusProject
         static List<string> DList;
         static List<string> AnswerList;
 
-        const int NUMBER_OF_QUESTIONS = 15;
+        const int NUMBER_OF_QUESTIONS = 10;
 
         static bool[] QuestionsUsed;
 
@@ -33,7 +33,7 @@ namespace WumpusProject
             CList = new List<string>();
             DList = new List<string>();
             AnswerList = new List<string>();
-            StreamReader reader = new StreamReader(@"E:\APCS\Wumpus\WumpusProject\WumpusProject\TriviaQuestions.txt");
+            StreamReader reader = new StreamReader(@".\TriviaQuestions.txt");
             for (int i = 0; i < NUMBER_OF_QUESTIONS; i++)
             {
                 TriviaList.Add(reader.ReadLine());
@@ -58,13 +58,40 @@ namespace WumpusProject
             }
         }
 
+        internal static int GetNumberOfQuestions()
+        {
+            return TriviaList.Count();
+        }
+
         public static string GetQuestion(int q)
         {
             if (q > NUMBER_OF_QUESTIONS || q <= 0)
             {
-                return "No such question";
+                return "No such question.";
+            }
+            if (TriviaList.Count == 0)
+            {
+                return "Out of Questions.";
             }
             return TriviaList[q - 1];
+        }
+        public static string[] GetAnswers(int q)
+        {
+            String[] answers = new String[4];
+            if (AList.Count == 0)
+            {
+                answers[0] = "Out of answers.";
+                answers[1] = "Out of answers.";
+                answers[2] = "Out of answers.";
+                answers[3] = "Out of answers.";
+                return answers;
+            }
+            answers[0] = AList[q - 1];
+            answers[1] = BList[q - 1];
+            answers[2] = CList[q - 1];
+            answers[3] = DList[q - 1];
+
+            return answers;
         }
 
         public static string GetAnswer(int q)
@@ -85,12 +112,23 @@ namespace WumpusProject
             if (answer.Equals(AnswerList[q - 1]))
             {
                 TriviaList.RemoveAt(q - 1);
+                AList.RemoveAt(q - 1);
+                BList.RemoveAt(q - 1);
+                CList.RemoveAt(q - 1);
+                DList.RemoveAt(q - 1);
                 AnswerList.RemoveAt(q - 1);
                 return true;
             }
-            TriviaList.RemoveAt(q - 1);
-            AnswerList.RemoveAt(q - 1);
-            return false;
+            else
+            { 
+                TriviaList.RemoveAt(q - 1);
+                AList.RemoveAt(q - 1);
+                BList.RemoveAt(q - 1);
+                CList.RemoveAt(q - 1);
+                DList.RemoveAt(q - 1);
+                AnswerList.RemoveAt(q - 1);
+                return false;
+            }            
         }
 
         public static bool AllQuestionsUsed
@@ -129,6 +167,7 @@ namespace WumpusProject
             Question[3] = CList[Number];
             Question[4] = DList[Number];
             Question[5] = AnswerList[Number];
+            Question[6] = Number.ToString();
             return Question;
         }
     }

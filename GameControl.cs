@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,50 +10,67 @@ namespace WumpusProject
     class GameControl
     {
         Wumpus wumpus;
-        UserInterface UI;
+        //UserInterface UI;
         Map map;
         static Trivia trivia;
         Cave cave;
         Player player;
 
         Boolean alive;
-      
-        int questionNumber;
-        
-        List<Boolean> questionsRight;
+
+        int questionNumbers;
+
+
+        List<bool> questionsRight;
   
         public GameControl()
         {
             wumpus = new Wumpus();//int position, int turnsSinceWumpus, enum WumpusState state
-            UI = new UserInterface(); //????
+            //UI = new UserInterface(); //????
             map = new Map();//roomNumberPlayer, roomNumberWumpus, roomNumberPit1, roomNumberPit2
             trivia = new Trivia();//TriviaList, A-D, AnswerList
             cave = new Cave();
             player = new Player();//arrows, coins, turns, playersPosition, highScore (all int)
 
             alive = true;
-            questionNumber = 2;//total number of questions in trivia text doc
+            questionNumbers = 10; //current number of questions in text file
             questionsRight = new List<bool>();
            
         }
 
-
-        public String getNextQuestion()//trivia
+        public String getNextQuestion()//for testing?
         {
-            return Trivia.GetQuestion(questionNumber);
+            Random r = new Random();
+            setQuestionNumber(r.Next(1, getNumberOfQuestions()+1));
+            return Trivia.GetQuestion(questionNumbers);
         }
-        public Boolean getCorrectness(String userAnswer)//userAnswer from UI
+        public int getNumberOfQuestions()
         {
-            Boolean correct = Trivia.CheckAnswer(userAnswer, questionNumber);
-            if (correct)
+            return Trivia.GetNumberOfQuestions();
+        }
+        public String[] getAnswers()
+        {
+            return Trivia.GetAnswers(questionNumbers);
+        }
+        public String getCorrectness(String userAnswer)//userAnswer from UI
+        {
+            player.spendCoin();
+            String correct = "";
+            Boolean isCorrect = Trivia.CheckAnswer(userAnswer, questionNumbers);
+            if (isCorrect)
             {
+                correct = "Correct";
                 questionsRight.Add(true);
+            }
+            else{
+                correct = "Incorrect";
             }
             return correct;
         }
-        public Boolean triviaRound(int correctNeeded, int chances)//wumpus is 3/5, pit is 2/3, buy 2 arrows 2/3, buy 1 secret 2/3
+        
+        public bool triviaRound(int correctNeeded, int chances)//wumpus is 3/5, pit is 2/3, buy 2 arrows 2/3, buy 1 secret 2/3
         {
-            Boolean win = true;
+            bool win = true;
             if (correctNeeded >= questionsRight.Count())
             {
                 win = true;
@@ -68,6 +86,10 @@ namespace WumpusProject
             return questionsRight;
         }
 
+        public void playerPosition(int setAs)
+        {
+            player.setPlayersPosition(setAs);
+        }
         public int getPlayerPosition()
         {
             return map.getRoomNumberPlayer();
@@ -77,8 +99,10 @@ namespace WumpusProject
         {
             return player.getCoins();
         }
+
         public int getArrows()
         {
+            player.buyArrow();
             return player.getArrows();
         }
         public int getScore()
@@ -86,48 +110,46 @@ namespace WumpusProject
             return player.getHighScore();
         }
 
-        public void setQuestionNumber(int number)//for testing
+        //getStats as int[] Score, Turns, Coins, Arrows
+        public int[] getStats()
         {
-            questionNumber = number;
+            int[] stats = new int[4];
+            stats[0] = player.getHighScore();
+            stats[1] = 0; //stub, add turns later
+            stats[2] = player.getCoins();
+            stats[3] = player.getArrows();
+            return stats;
         }
-
-        public int getQuestionNumber()
-        {
-            return questionNumber;
-        }
+   
         
         public String getSecret()
         {
             return player.buySecret();
         }
-        public Boolean wantArrows(String userOption)//from UI
-        {
-            Boolean buy = false;
-            if (userOption.ToLower().CompareTo("yes") == 0)
-            {
-                buy = true;
-            }
-            return buy;
-        }
-        public Boolean wantSecret(String userOption)//from UI
-        {
-            Boolean buy = false;
-            if (userOption.ToLower().CompareTo("yes") == 0)
-            {
-                buy = true;
-            }
-            return buy;
-        }
+        //public bool wantArrows(String userOption)//from UI
+        //{
+        //    bool buy = false;
+        //    if (userOption.ToLower().CompareTo("yes") == 0)
+        //    {
+        //        buy = true;
+        //    }
+        //    return buy;
+        //}
+        //public bool wantSecret()//from UI
+        //{
+        //    bool buy = true;
+        //    return buy;
+        //}
 
 
-        public Boolean getPit()
+        public bool getPit()
         {
-            Boolean pit = map.getRoomNumberPlayer() == map.getRoomNumberPit1() || map.getRoomNumberPlayer() == map.getRoomNumberPit1();
+            bool pit = player.getPlayersPosition() == map.getRoomNumberPit1() || player.getPlayersPosition() == map.getRoomNumberPit1();
             return pit;
         }
-        public Boolean getBat()
+        public bool getBat()
         {
-            Boolean bat = map.getRoomNumberPlayer() == map.getRoomNumberBat1() || map.getRoomNumberPlayer() == map.getRoomNumberBat2();
+            bool bat = player.getPlayersPosition() == map.getRoomNumberBat1() || player.getPlayersPosition() == map.getRoomNumberBat2();
             return bat;
         }
 
@@ -144,25 +166,34 @@ namespace WumpusProject
         public String getWarning()
         {
             String warn = "";
-            if (Math.Abs(map.getRoomNumberPlayer()-wumpus.getWumpusPosition())==1)
+            if (Math.Abs(player.getPlayersPosition()-wumpus.getWumpusPosition())==1)
             {
                 warn += "I smell a Wumpus! ";
             }
-            if (Math.Abs(map.getRoomNumberPlayer() - map.getRoomNumberBat1()) == 1 || Math.Abs(map.getRoomNumberPlayer() - map.getRoomNumberBat2()) == 1)
+            if (Math.Abs(player.getPlayersPosition() - map.getRoomNumberBat1()) == 1 || Math.Abs(player.getPlayersPosition() - map.getRoomNumberBat2()) == 1)
             {
                 warn+= "Bats Nearby ";
             }
-            if (Math.Abs(map.getRoomNumberPlayer() - map.getRoomNumberPit1()) == 1 || Math.Abs(map.getRoomNumberPlayer() - map.getRoomNumberPit2()) == 1)
+            if(Math.Abs(player.getPlayersPosition() - map.getRoomNumberPit1()) == 1|| Math.Abs(player.getPlayersPosition() - map.getRoomNumberPit2()) == 1)
             {
                 warn+= "I feel a draft";
             }
             return warn;
         }
-
+        public void setQuestionNumber(int number)//for testing
+        {
+            questionNumbers = number;
+        }
+        public int getQuestionNumber()
+        {
+            return questionNumbers;
+        }
+        
         public Boolean checkIfAlive()//alive
         {
             return alive;
         }
+
 
     }
 }

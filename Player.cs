@@ -17,6 +17,7 @@ namespace WumpusProject
         public String alive;
 
         Map map;
+        GameControl gameControl;
 
         public Player()
         {
@@ -53,7 +54,7 @@ namespace WumpusProject
         public void buyArrow()
         {
             coins--;
-            // calls trivia
+            gameControl.getNextQuestion();
             arrows += 2;
         }
         public int getHighScore()

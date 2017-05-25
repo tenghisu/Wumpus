@@ -1,0 +1,125 @@
+{
+  "roomList": [
+  {
+    "roomID": 0,
+    "connectedTo": [ 1, 2, 3 ]
+  },
+  {
+    "roomID": 1,
+    "connectedTo": [ 0, 6, 14 ]
+  },
+  {
+    "roomID": 2,
+    "connectedTo": [ 0, 4, 15 ]
+  },
+  {
+    "roomID": 3,
+    "connectedTo": [ 0, 5, 7, 8 ]
+  },
+  {
+    "roomID": 4,
+    "connectedTo": [ 2, 5, 21,24 ]
+  },
+  {
+    "roomID": 5,
+    "connectedTo": [ 3, 4, 18 ]
+  },
+  {
+    "roomID": 6,
+    "connectedTo": [ 1, 7, 12, 13 ]
+  },
+  {
+    "roomID": 7,
+    "connectedTo": [ 3, 6, 11, 13 ]
+  },
+  {
+    "roomID": 8,
+    "connectedTo": [ 3, 9, 10 ]
+  },
+  {
+    "roomID": 9,
+    "connectedTo": [ 8, 17, 19 ]
+  },
+  {
+    "roomID": 10,
+    "connectedTo": [ 5, 8, 18, 20 ]
+  },
+  {
+    "roomID": 11,
+    "connectedTo": [ 7, 17, 29 ]
+  },
+  {
+    "roomID": 12,
+    "connectedTo": [ 6, 25, 30 ]
+  },
+  {
+    "roomID": 13,
+    "connectedTo": [ 6, 7 ]
+  },
+  {
+    "roomID": 14,
+    "connectedTo": [ 1, 15, 26 ]
+  },
+  {
+    "roomID": 15,
+    "connectedTo": [ 2, 14, 21, 26 ]
+  },
+  {
+    "roomID": 16,
+    "connectedTo": [ 10, 20, 27, 28 ]
+  },
+  {
+    "roomID": 17,
+    "connectedTo": [ 9, 11, 23, 29 ]
+  },
+  {
+    "roomID": 18,
+    "connectedTo": [ 5, 10, 24 ]
+  },
+  {
+    "roomID": 19,
+    "connectedTo": [ 9, 22 ]
+  },
+  {
+    "roomID": 20,
+    "connectedTo": [ 10, 16, 28 ]
+  },
+  {
+    "roomID": 21,
+    "connectedTo": [ 4, 15 ]
+  },
+  {
+    "roomID": 22,
+    "connectedTo": [ 9, 19, 23 ]
+  },
+  {
+    "roomID": 23,
+    "connectedTo": [ 17, 22 ]
+  },
+  {
+    "roomID": 24,
+    "connectedTo": [ 4, 18 ]
+  },
+  {
+    "roomID": 25,
+    "connectedTo": [ 12, 26 ]
+  },
+  {
+    "roomID": 26,
+    "connectedTo": [ 14, 15, 25 ]
+  },
+  {
+    "roomID": 27,
+    "connectedTo": [ 16, 19, 22 ]
+  },
+  {
+    "roomID": 28,
+    "connectedTo": [ 16, 20 ]
+  },
+  {
+    "roomID": 29,
+    "connectedTo": [ 11, 17 ]
+  }
+
+  ]
+}

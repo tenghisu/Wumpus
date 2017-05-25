@@ -9,13 +9,13 @@ namespace WumpusProject
     public class Node<T>
     {
         //Private member-variables
-        private T m_data;
+        private Room m_data;
         protected NodeList<T> m_neighbors = null;
 
 
         public Node() { }
 
-        public Node(T data)
+        public Node(Room data)
         {
             m_data = data;
             m_neighbors = new NodeList<T>();
@@ -35,7 +35,7 @@ namespace WumpusProject
             return m_neighbors[index];
         }
 
-        public T Value
+        public Room Value
         {
             get
             {
@@ -74,6 +74,19 @@ namespace WumpusProject
                 return m_neighbors.Count();
             }
         }
+
+        public List<int> neighborList()
+        {
+            List<int> i = new List<int>();
+
+            foreach(Node<T> node in m_neighbors)
+            {
+                i.Add(node.Value.ID());
+            }
+
+            return i;
+        }
+
 
         public Boolean isConnected(Node<T> target)
         {

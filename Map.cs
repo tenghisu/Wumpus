@@ -79,29 +79,20 @@ namespace WumpusProject
         {
             return roomNumberBat2; 
         }
-        public String isWumpusCloseToPlayer()
-        {
-            Boolean warning = false;
-            if (roomNumberWumpus + 1 == roomNumberPlayer) 
-            {
-                warning = true;
-            }
-            return "I smell a Wumpus";
-        }
-        public String hazards()
+        public String hazards(Cave c)
         {
             String warning = "";
-            if (roomNumberPlayer.nextTo(roomNumberPit1) || roomNumberPlayer.nextTo(roomNumberPit2))
+            if (c.getNodeRoom(roomNumberPlayer).neighborList().Contains(roomNumberPit1) || c.getNodeRoom(roomNumberPlayer).neighborList().Contains(roomNumberPit2))
             {
-                warning = "I feel a draft.";
+                warning += "I feel a draft. ";
             }
-            if (roomNumberPlayer.nextTo(roomNumberBat1) || roomNumberPlayer.nextTo(roomNumberBat2))
+            if (c.getNodeRoom(roomNumberPlayer).neighborList().Contains(roomNumberBat1) || c.getNodeRoom(roomNumberPlayer).neighborList().Contains(roomNumberBat2))
             {
-                warning = "Bats Nearby.";
+                warning += "Bats Nearby. ";
             } 
-            if (roomNumberPlayer.nextTo(roomNumberWumpus))
+            if (c.getNodeRoom(roomNumberPlayer).neighborList().Contains(roomNumberWumpus))
             {
-                warning = "I smell a Wumpus!";
+                warning += "I smell a Wumpus!";
             }
             return warning;
         }
