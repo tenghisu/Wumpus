@@ -17,7 +17,6 @@ namespace WumpusProject
         public String alive;
 
         Map map;
-        GameControl gameControl;
 
         public Player()
         {
@@ -35,9 +34,17 @@ namespace WumpusProject
             }
             turns++;
         }
+        public int getTurns()
+        {
+            return turns;
+        }
         public int getCoins()
         {
             return coins;
+        }
+        public void setCoins(int newCoins)
+        {
+            coins = newCoins;
         }
         public void setPlayersPosition()
         {
@@ -54,7 +61,6 @@ namespace WumpusProject
         public void buyArrow()
         {
             coins--;
-            gameControl.getNextQuestion();
             arrows += 2;
         }
         public int getHighScore()

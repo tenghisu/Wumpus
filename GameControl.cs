@@ -15,12 +15,13 @@ namespace WumpusProject
         static Trivia trivia;
         Cave cave;
         Player player;
+        //UserInterface ui;
 
         Boolean alive;
 
         int questionNumbers;
 
-
+        int questionsCorrect;
         List<bool> questionsRight;
   
         public GameControl()
@@ -35,9 +36,13 @@ namespace WumpusProject
             alive = true;
             questionNumbers = 10; //current number of questions in text file
             questionsRight = new List<bool>();
+            int questionsCorrect = 0;
            
         }
-
+        public void takeTurn()
+        {
+            player.newTurn();
+        }
         public String getNextQuestion()//for testing?
         {
             Random r = new Random();
@@ -52,26 +57,26 @@ namespace WumpusProject
         {
             return Trivia.GetAnswers(questionNumbers);
         }
-        public String getCorrectness(String userAnswer)//userAnswer from UI
+        public bool getCorrectness(String userAnswer)//userAnswer from UI
         {
-            player.spendCoin();
-            String correct = "";
-            Boolean isCorrect = Trivia.CheckAnswer(userAnswer, questionNumbers);
-            if (isCorrect)
+            int coins = player.getCoins();
+            coins--;
+            player.setCoins(coins);
+            bool correct = Trivia.CheckAnswer(userAnswer, questionNumbers);
+            if (correct)
             {
-                correct = "Correct";
-                questionsRight.Add(true);
-            }
-            else{
-                correct = "Incorrect";
+                questionsCorrect++;
             }
             return correct;
         }
-        
-        public bool triviaRound(int correctNeeded, int chances)//wumpus is 3/5, pit is 2/3, buy 2 arrows 2/3, buy 1 secret 2/3
+        public int getQuestionsCorrect()
+        {
+            return questionsCorrect;
+        }
+        public bool winTriviaRound(int correctNeeded, int chances)//wumpus is 3/5, pit is 2/3, buy 2 arrows 2/3, buy 1 secret 2/3
         {
             bool win = true;
-            if (correctNeeded >= questionsRight.Count())
+            if (correctNeeded >= questionsCorrect)
             {
                 win = true;
             }
@@ -79,6 +84,7 @@ namespace WumpusProject
             {
                 win = false;
             }
+            questionsCorrect = 0;
             return win;
         }
         public List<Boolean> getQuestionsRight()
@@ -86,21 +92,16 @@ namespace WumpusProject
             return questionsRight;
         }
 
-        public void playerPosition(int setAs)
-        {
-            player.setPlayersPosition(setAs);
-        }
         public int getPlayerPosition()
         {
             return map.getRoomNumberPlayer();
         }
-
         public int getCoins()
         {
             return player.getCoins();
         }
 
-        public int getArrows()
+        public int buyArrows()
         {
             player.buyArrow();
             return player.getArrows();
@@ -115,7 +116,7 @@ namespace WumpusProject
         {
             int[] stats = new int[4];
             stats[0] = player.getHighScore();
-            stats[1] = 0; //stub, add turns later
+            stats[1] = player.getTurns();
             stats[2] = player.getCoins();
             stats[3] = player.getArrows();
             return stats;
@@ -142,21 +143,45 @@ namespace WumpusProject
         //}
 
 
-        public bool getPit()
+        public int getPosPit1()
         {
-            bool pit = player.getPlayersPosition() == map.getRoomNumberPit1() || player.getPlayersPosition() == map.getRoomNumberPit1();
+            return map.getRoomNumberPit1();
+        }
+        public int getPosPit2()
+        {
+            return map.getRoomNumberPit2();
+        }
+        public int getPosBat1()
+        {
+            return map.getRoomNumberBat1();
+        }
+        public int getPosBat2()
+        {
+            return map.getRoomNumberBat2();
+        }
+        public bool pitEncounter()
+        {
+            bool pit = map.getRoomNumberPlayer() == getPosPit1() || map.getRoomNumberPlayer() == getPosPit2();
             return pit;
         }
-        public bool getBat()
+        public bool batEncounter()
         {
-            bool bat = player.getPlayersPosition() == map.getRoomNumberBat1() || player.getPlayersPosition() == map.getRoomNumberBat2();
+            bool bat = map.getRoomNumberPlayer() == getPosBat1() || map.getRoomNumberPlayer() == getPosBat2();
             return bat;
         }
 
 
-        public void wumpusEncounter()
+        public void wumpusEncounter()//will set wumpus state
         {
-            wumpus.playerEnters(getPit(), getBat(), cave);
+            wumpus.playerEnters(pitEncounter(), batEncounter(), cave);
+        }
+        public bool thereIsWumpus()
+        {
+            if(map.getRoomNumberWumpus() == map.getRoomNumberPlayer())
+            {
+                return true;
+            }
+            return false;
         }
         public String getWumpusState()
         {
@@ -165,20 +190,7 @@ namespace WumpusProject
         
         public String getWarning()
         {
-            String warn = "";
-            if (Math.Abs(player.getPlayersPosition()-wumpus.getWumpusPosition())==1)
-            {
-                warn += "I smell a Wumpus! ";
-            }
-            if (Math.Abs(player.getPlayersPosition() - map.getRoomNumberBat1()) == 1 || Math.Abs(player.getPlayersPosition() - map.getRoomNumberBat2()) == 1)
-            {
-                warn+= "Bats Nearby ";
-            }
-            if(Math.Abs(player.getPlayersPosition() - map.getRoomNumberPit1()) == 1|| Math.Abs(player.getPlayersPosition() - map.getRoomNumberPit2()) == 1)
-            {
-                warn+= "I feel a draft";
-            }
-            return warn;
+            return map.hazards(cave);
         }
         public void setQuestionNumber(int number)//for testing
         {
@@ -189,8 +201,15 @@ namespace WumpusProject
             return questionNumbers;
         }
         
-        public Boolean checkIfAlive()//alive
+        public bool checkIfAlive()//alive
         {
+            if (player.getTurns() > 0)
+            {
+                if (player.getCoins() <= 0 || player.getArrows() <= 0)
+                {
+                    alive = false;
+                }
+            }
             return alive;
         }
 
