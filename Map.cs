@@ -20,6 +20,7 @@ namespace WumpusProject
         Random rand;
         Wumpus wumpus;
         Player player;
+        UserInterface UI;
 
         public void newGame()
         {   
@@ -96,8 +97,36 @@ namespace WumpusProject
             }
             return warning;
         }
-        public void movePlayer()
+        public void movePlayer(Cave c)
         {
+            int click = 0;
+            // click == UI.playerMoves();
+            List<int> rooms = new List<int>();
+            rooms = c.getNodeRoom(roomNumberPlayer).neighborList();
+            if (click == 0)
+            {
+                roomNumberPlayer = rooms[0];
+            }
+            else if (click == 1)
+            {
+                roomNumberPlayer = rooms[1];
+            }
+            else if (click == 2)
+            {
+                roomNumberPlayer = rooms[2];
+            }
+            else if (click == 3)
+            {
+                roomNumberPlayer = rooms[3];
+            }
+            else if (click == 4)
+            {
+                roomNumberPlayer = rooms[4];
+            }
+            else if (click == 5)
+            {
+                roomNumberPlayer = rooms[5];
+            }
             if (roomNumberPlayer == roomNumberWumpus)
             {
                 Trivia.GetRandomQuestionAndAnswers();
