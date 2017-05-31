@@ -52,7 +52,10 @@ namespace WumpusProject
             {
                 movement = 1;
             }
-            roomNumberWumpus = roomNumberWumpus + movement;
+            if (movement == 1)
+            {
+
+            }
             return roomNumberWumpus;
             // given the wumpus state I can make the wumpus move to a whole new room number
         }
@@ -130,6 +133,7 @@ namespace WumpusProject
             if (roomNumberPlayer == roomNumberWumpus)
             {
                 Trivia.GetRandomQuestionAndAnswers();
+                player.coins--;
             }
             if (roomNumberPlayer == roomNumberBat1)
             {
@@ -148,6 +152,7 @@ namespace WumpusProject
             if (roomNumberPlayer == roomNumberPit1 || roomNumberPlayer == roomNumberPit2)
             {
                 Trivia.GetRandomQuestionAndAnswers();
+                player.coins--;
             }
         }
         public int shootArrow()
@@ -160,14 +165,14 @@ namespace WumpusProject
         {
             Random rand = new Random();
             String[] secrets = new String [7];
-            secrets[0] = roomNumberPlayer.ToString();
-            secrets[1] = roomNumberWumpus.ToString();
-            secrets[2] = roomNumberBat1.ToString();
-            secrets[3] = roomNumberPit1.ToString();
-            secrets[4] = Trivia.GetAnswer(rand.Next(49));
-            secrets[5] = roomNumberBat2.ToString();
-            secrets[6] = roomNumberPit2.ToString();
-            return secrets[rand.Next(7)];
+            secrets[0] = "You are in room " + roomNumberPlayer + ".";
+            secrets[1] = "The wumpus is in room " + roomNumberWumpus + ".";
+            secrets[2] = "A bat is in " + roomNumberBat1 + ".";
+            secrets[3] = "A pit is in " + roomNumberPit1 + ".";
+            secrets[4] = "A question to a trivia question is " + Trivia.GetAnswer(rand.Next(49));
+            secrets[5] = "A bat is in " + roomNumberBat2 + ".";
+            secrets[6] = "A pit is in " + roomNumberPit2 + ".";
+            return secrets[rand.Next(0, 7)];
         }
     }
 }

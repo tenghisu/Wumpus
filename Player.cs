@@ -9,9 +9,9 @@ namespace WumpusProject
 {
     class Player
     {
-        private int arrows;
-        private int coins;
-        private int turns;
+        public int arrows;
+        public int coins;
+        public int turns;
         private int playersPosition;
         public int highScore;
         public String alive;
@@ -60,8 +60,9 @@ namespace WumpusProject
         }
         public void buyArrow()
         {
-            coins--;
             arrows += 2;
+            Trivia.GetRandomQuestionAndAnswers();
+            coins--;
         }
         public int getHighScore()
         {
@@ -69,7 +70,8 @@ namespace WumpusProject
         }
         public String buySecret()
         {
-            String secret = map.buySecret();
+            String secret = "";
+            secret = map.buySecret();
             return secret;
         }
         public void shotArrow()
