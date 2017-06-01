@@ -20,7 +20,7 @@ namespace WumpusProject
         Random rand;
         Wumpus wumpus;
         Player player;
-        UserInterface UI;
+        //UserInterface UI;
 
         public void newGame()
         {   
@@ -133,7 +133,9 @@ namespace WumpusProject
             if (roomNumberPlayer == roomNumberWumpus)
             {
                 Trivia.GetRandomQuestionAndAnswers();
-                player.coins--;
+                int coins = player.getCoins();
+                coins--;
+                player.setCoins(coins);
             }
             if (roomNumberPlayer == roomNumberBat1)
             {
@@ -152,7 +154,9 @@ namespace WumpusProject
             if (roomNumberPlayer == roomNumberPit1 || roomNumberPlayer == roomNumberPit2)
             {
                 Trivia.GetRandomQuestionAndAnswers();
-                player.coins--;
+                int coins = player.getCoins();
+                coins--;
+                player.setCoins(coins);
             }
         }
         public int shootArrow()
