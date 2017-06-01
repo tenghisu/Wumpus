@@ -10,12 +10,11 @@ namespace WumpusProject
     class GameControl
     {
         Wumpus wumpus;
-        //UserInterface UI;
         Map map;
         static Trivia trivia;
         Cave cave;
         Player player;
-        //UserInterface ui;
+
 
         Boolean alive;
 
@@ -36,7 +35,7 @@ namespace WumpusProject
             alive = true;
             questionNumbers = 10; //current number of questions in text file
             questionsRight = new List<bool>();
-            int questionsCorrect = 0;
+            questionsCorrect = 0;
            
         }
         public void takeTurn()
@@ -76,7 +75,7 @@ namespace WumpusProject
         public bool winTriviaRound(int correctNeeded, int chances)//wumpus is 3/5, pit is 2/3, buy 2 arrows 2/3, buy 1 secret 2/3
         {
             bool win = true;
-            if (correctNeeded >= questionsCorrect)
+            if (questionsCorrect >= correctNeeded)
             {
                 win = true;
             }
@@ -84,7 +83,7 @@ namespace WumpusProject
             {
                 win = false;
             }
-            questionsCorrect = 0;
+         //   questionsCorrect = 0;
             return win;
         }
         public List<Boolean> getQuestionsRight()
@@ -101,9 +100,12 @@ namespace WumpusProject
             return player.getCoins();
         }
 
-        public int buyArrows()
+        public void buyArrows()
         {
             player.buyArrow();
+        }
+        public int getArrows()
+        {
             return player.getArrows();
         }
         public int getScore()
